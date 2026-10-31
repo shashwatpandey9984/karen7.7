@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KAREN AI</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./config.js"></script>
+</head>
+<body>
+
+  <!-- single alarm audio element (served from Flask static) -->
+  <audio id="alarmSound" src="./alarm.mp3" preload="auto"></audio>
+
+  <div class="chat-container">
+    <h1 class="logo">KAREN <span>V7.7</span></h1>
+
+    <div class="chat-box" id="chatBox"></div> 
+
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type a message...">
+      <button id="sendBtn" type="button" onclick="sendMessage()">➤</button>
+    </div>
+
+    <!-- video moved to top-right corner with styling -->
+    <video id="cameraFeed" autoplay playsinline style="display:none; position:fixed; top:24px; right:24px; width:320px; height:240px; border-radius:8px; box-shadow:0 8px 30px rgba(0,0,0,0.6); z-index:9999;"></video>
+    <canvas id="faceOverlay" style="display:none; position:fixed; top:24px; right:24px; width:320px; height:240px; z-index:10000; pointer-events:none;"></canvas>
+  </div>
+
+  <section class="code-workbench" aria-labelledby="codeWorkbenchTitle">
+    <header class="workbench-header">
+      <div>
+        <h2 id="codeWorkbenchTitle">Code Debugger</h2>
+        <p>Static analysis only. Submitted code is never executed.</p>
+      </div>
+      <span id="debuggerStatus" role="status" aria-live="polite">Ready</span>
+    </header>
+
+    <label class="filename-field" for="codeFilename">
+      Filename
+      <input id="codeFilename" type="text" value="snippet.py" maxlength="128">
+    </label>
+    <label class="source-label" for="sourceCode">Source code</label>
+    <textarea id="sourceCode" spellcheck="false" maxlength="100000" placeholder="Paste code to analyze"></textarea>
+
+    <div class="debugger-actions" aria-label="Code debugging actions">
+      <button id="analyzeCodeBtn" type="button">Analyze Code</button>
+      <button id="findErrorsBtn" type="button">Find Errors</button>
+      <button id="explainErrorsBtn" type="button">Explain Errors</button>
+      <button id="generateFixBtn" type="button">Generate Fixed Code</button>
+      <button id="compareCodeBtn" type="button">Compare Original and Fixed Code</button>
+      <button id="runTestsBtn" type="button">Run Tests</button>
+      <button id="analyzeAgainBtn" type="button">Analyze Again</button>
+      <button id="applyFixesBtn" type="button" disabled>Apply Fixes</button>
+      <label for="correctionAttempts">Correction attempts</label>
+      <input id="correctionAttempts" type="number" min="1" max="3" value="1">
+    </div>
+
+    <div class="analysis-layout">
+      <section aria-labelledby="findingsTitle">
+        <h3 id="findingsTitle">Findings</h3>
+        <ul id="debuggerFindings" class="debugger-findings" aria-live="polite"></ul>
+        <p id="debuggerToolStatus" class="debugger-note"></p>
+      </section>
+      <section id="diffPanel" aria-labelledby="diffTitle" hidden>
+        <h3 id="diffTitle">Proposed change</h3>
+        <p id="fixExplanation" class="debugger-note"></p>
+        <pre id="codeDiff" class="code-diff"></pre>
+      </section>
+    </div>
+    <p class="debugger-note">No coding AI is configured. Only a parse-verified missing-colon repair is proposed automatically. Behavior tests require an OS-level sandbox and are disabled here.</p>
+  </section>
+
+  <!-- Floating Voice Buttons -->
+  <button id="voiceBtn" type="button" onclick="toggleVoice()">🔊</button>
+  <button id="voiceRecordBtn" type="button" onclick="startListening()">🎙</button>
+
+  <!-- camera control buttons -->
+  <button id="openCamBtn" type="button" onclick="openCameraAndDetect()">Open Camera</button>
+  <button id="stopCamBtn" type="button" onclick="stopCameraDetection()">Stop Camera</button>
+
+  <script src="./index.js" defer></script>
+</body>
+</html>
